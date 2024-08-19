@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "devDependencies": {
+    "cssnano": "^7.0.5",
+    "postcss": "^8.4.41",
+    "postcss-cli": "^11.0.0",
+    "terser": "^5.31.6"
+  },
+  "scripts": {
+    "minifyTOC": "npx terser TOC.js -o TOC.min.js --config-file terser.config.json & npx postcss TOC.css -o TOC.min.css"
+  }
+}

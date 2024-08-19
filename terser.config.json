@@ -1,0 +1,15 @@
+{
+  "compress": {
+    "drop_console": true,
+    "drop_debugger": true,
+    "passes": 3
+  },
+  "mangle": {
+    "toplevel": true,
+    "reserved": [],
+    "properties": {}
+  },
+  "output": {
+    "comments": false
+  }
+}
