@@ -24,7 +24,7 @@ Squre 스킨 전용: 해당 위치에 `<div id="table-of-contents"></div>` 코�
 
 toc.min.js와 toc.min.css를 업로드
 
-## 수정 - 선택사항
+## 수정
 
 최초 clone 후
 
@@ -35,7 +35,7 @@ npm install
 TOC.js 혹은 TOC.css 수정 후
 
 ```bash
-npm run minifyTOC
+npm start
 ```
 
 toc.min.js와 toc.min.css 생성

@@ -7,6 +7,6 @@
     "terser": "^5.31.6"
   },
   "scripts": {
-    "minifyTOC": "npx terser TOC.js -o TOC.min.js --config-file terser.config.json & npx postcss TOC.css -o TOC.min.css"
+    "start": "npx terser TOC.js -o TOC.min.js --config-file terser.config.json & npx postcss TOC.css -o TOC.min.css"
   }
 }
