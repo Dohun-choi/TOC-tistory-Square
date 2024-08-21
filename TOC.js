@@ -49,7 +49,7 @@ const articleContents = document.getElementById(contentId);
       if (currentH3List) {
         const listItem = document.createElement("li");
         const h3Link = document.createElement("a");
-        h3Link.textContent = hTag.textContent;
+        h3Link.textContent = `▸ ${hTag.textContent}`;
         h3Link.href = `#${tagHref.h3Tag(hTag)}`;
         h3Link.id = `TOC-${tagHref.h3Tag(hTag)}`;
         h3Link.classList.add("h3-TOC");
