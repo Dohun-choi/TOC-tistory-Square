@@ -43,6 +43,10 @@ h3 {
   line-height: 200%;
 }
 
+#table-of-contents .h3-TOC::before {
+  content: "▸";
+}
+
 #table-of-contents .h3-TOC {
   font-size: 1.1rem;
   line-height: 140%;
