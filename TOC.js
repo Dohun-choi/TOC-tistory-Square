@@ -125,7 +125,6 @@ function scrollToCenter(element, containerId) {
 
   container.scrollTo({
     top: scrollTop,
-    behavior: "smooth",
   });
 }
 
