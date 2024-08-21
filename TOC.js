@@ -1,13 +1,13 @@
 // @ts-check
 
-const tagHref = {
-  h2Tag(hTag) {
-    return `h2-${hTag.offsetTop}`;
-  },
-  h3Tag(hTag) {
-    return `h3-${hTag.offsetTop}`;
-  },
-};
+/**
+ *
+ * @param {HTMLElement} hTag
+ * @returns
+ */
+function getTagId(hTag) {
+  return `${hTag.tagName}-${hTag.offsetTop}`;
+}
 
 const contentId = "article-view";
 
@@ -18,48 +18,44 @@ const articleContents = document.getElementById(contentId);
 (function makeToc(articleContents) {
   if (!articleContents) return;
 
-  const hElements = articleContents.querySelectorAll("h2, h3");
+  const hElements = /** @type {NodeListOf<HTMLElement>} */ (articleContents.querySelectorAll("h2, h3"));
   const tocContainer = document.querySelector("#table-of-contents");
 
   const tocList = document.createElement("ul");
   tocContainer?.appendChild(tocList);
   tocList.id = "TOC-list";
 
-  let currentH3List = null;
+  let currentH3List = /** @type {HTMLElement | null} */ (null);
 
   hElements.forEach((hTag) => {
+    const currentList = setTOC(hTag);
     if (hTag.tagName === "H2") {
-      hTag.id = tagHref.h2Tag(hTag);
-
-      const currentH2Item = document.createElement("li");
-      const h2Link = document.createElement("a");
-      h2Link.textContent = hTag.textContent;
-      h2Link.href = `#${tagHref.h2Tag(hTag)}`;
-      h2Link.id = `TOC-${tagHref.h2Tag(hTag)}`;
-      h2Link.classList.add("h2-TOC");
-
-      currentH2Item.appendChild(h2Link);
-
-      currentH3List = document.createElement("ul");
-      currentH2Item.appendChild(currentH3List);
-      tocList.appendChild(currentH2Item);
+      tocList.appendChild(currentList);
     } else if (hTag.tagName === "H3") {
-      hTag.id = tagHref.h3Tag(hTag);
-
-      if (currentH3List) {
-        const listItem = document.createElement("li");
-        const h3Link = document.createElement("a");
-        h3Link.textContent = `▸ ${hTag.textContent}`;
-        h3Link.href = `#${tagHref.h3Tag(hTag)}`;
-        h3Link.id = `TOC-${tagHref.h3Tag(hTag)}`;
-        h3Link.classList.add("h3-TOC");
-
-        listItem.appendChild(h3Link);
-        currentH3List.appendChild(listItem);
-      }
+      if (currentH3List) currentH3List.appendChild(currentList);
+      else tocList.appendChild(currentList);
     }
   });
 })(articleContents);
+
+/**
+ *
+ * @param {HTMLElement} hTag
+ */
+function setTOC(hTag) {
+  hTag.id = getTagId(hTag);
+
+  const aTag = document.createElement("a");
+  aTag.textContent = hTag.textContent;
+  aTag.href = `#${getTagId(hTag)}`;
+  aTag.id = `TOC-${getTagId(hTag)}`;
+  aTag.classList.add(`${hTag.tagName.toLowerCase()}-TOC`);
+
+  const currentHTagElement = document.createElement("li");
+  currentHTagElement.appendChild(aTag);
+
+  return currentHTagElement;
+}
 
 function TOCHighlight() {
   const className = "active_TOC";
@@ -69,7 +65,7 @@ function TOCHighlight() {
   const hElements = Array.from(articleContents.querySelectorAll("h2, h3"));
 
   const viewportTop = window.scrollY;
-  const viewportMiddle = window.scrollY + window.innerHeight / 2;
+  const viewportMiddle = window.scrollY + window.innerHeight / 1.5;
 
   const elementsInRange = hElements.filter((el) => {
     const rect = el.getBoundingClientRect();
@@ -137,11 +133,7 @@ function getTocElement(articleHTag) {
   let element;
   if (!articleHTag) return null;
 
-  if (articleHTag.tagName === "H2") {
-    element = document.getElementById(`TOC-${articleHTag.id}`);
-  } else {
-    element = document.getElementById(`TOC-${articleHTag.id}`);
-  }
+  element = document.getElementById(`TOC-${articleHTag.id}`);
 
   return element;
 }
