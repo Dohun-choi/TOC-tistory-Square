@@ -24,6 +24,10 @@ Squre 스킨 전용: 해당 위치에 `<div id="table-of-contents"></div>` 코�
 
 toc.min.js와 toc.min.css를 업로드
 
+## 적용된 블로그 게시글 보기
+
+[TOC 적용된 블로그 게시글](https://curt-poem.tistory.com/entry/%EB%B0%98%EC%9D%91%ED%98%95-%EB%94%94%EC%9E%90%EC%9D%B8-%EC%BB%A8%ED%85%8C%EC%9D%B4%EB%84%88-%EC%BF%BC%EB%A6%AC%EB%A1%9C-%EC%83%88%EB%A1%AD%EA%B2%8C-%EC%9A%94%EB%A6%AC%ED%95%98%EA%B8%B0) - 폰트 및 글자 크기로 인해 실제 적용시 다를 수 있습니다.
+
 ## 수정
 
 최초 clone 후
