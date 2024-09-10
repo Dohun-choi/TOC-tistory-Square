@@ -72,7 +72,7 @@ function TOCHighlight() {
     const elementTop = rect.top + window.scrollY;
     const elementBottom = elementTop + rect.height;
 
-    return elementTop <= viewportMiddle && elementBottom >= viewportTop;
+    return elementTop <= viewportMiddle && elementTop >= viewportTop && elementBottom > viewportTop;
   });
 
   let closest;
