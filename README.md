@@ -22,7 +22,7 @@ Squre 스킨 전용: 해당 위치에 `<div id="table-of-contents"></div>` 코�
 <!-- content close -->
 ```
 
-toc.min.js와 toc.min.css를 업로드
+toc.js(혹은 toc.min.js)와 toc.css(혹은 toc.min.css)를 업로드
 
 ## 적용된 블로그 게시글 보기
 
@@ -37,6 +37,8 @@ npm install
 ```
 
 TOC.js 혹은 TOC.css 수정 후
+
+### 선택
 
 ```bash
 npm start
