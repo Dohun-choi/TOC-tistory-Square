@@ -48,7 +48,7 @@ function setTOC(hTag) {
   const buttonTag = document.createElement("button");
   buttonTag.textContent = hTag.textContent;
   buttonTag.addEventListener("click", () => {
-    document.getElementById(`${getTagId(hTag)}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    hTag.scrollIntoView({ behavior: "smooth", block: "start" });
     console.log("이동");
   });
   buttonTag.id = `TOC-${getTagId(hTag)}`;
@@ -105,10 +105,8 @@ function TOCHighlight() {
       getTocElement(e)?.classList.remove(className);
     });
     toActive.classList.add(className);
-    toActive.scrollIntoView({ behavior: "instant", block: "center" });
   }
 }
-
 /**
  *
  * @param {Element | undefined} articleHTag

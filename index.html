@@ -2560,303 +2560,418 @@
 
               <div class="tt_article_useless_p_margin contents_style">
                 <p data-ke-size="size16">
-                  많은 개발자들의 성능 개선을 위해 자바스크립트의 코드를 개선하는 데 집중합니다. 하지만 웹 페이지의
-                  성능에는 자바스크립트 뿐만 아니라 HTML, CSS, 파일의 크기, 네트워크 등 다양한 요소가 영향을 미칩니다.
-                  물론 자바스크립트의 성능에 끼치는 영향이 다른 요소에 비해 큰 경우가 많지만 CSS 또한 분명히 성능에
-                  영향을 끼칩니다. 오늘은 자바스크립트를 제외한 웹 성능을 개선할 때 신경 쓸만한 요소를 살펴보겠습니다.
-                </p>
-                <h2 data-ke-size="size26" id="H2-435">HTML 구조</h2>
-                <h3 data-ke-size="size23" id="H3-494">Dom의 깊이</h3>
-                <p data-ke-size="size16">
-                  HTML 문서의 DOM(Document Object Model) 구조가 복잡하고 깊이가 깊을수록 브라우저가 문서를 렌더링하는 데
-                  더 많은 시간을 소요하게 됩니다. 단순히 DOM에 포함된 HTML 요소의 개수도 영향을 끼치지만 그보다는 어떻게
-                  배치되어 있는 지가 더 큰 영향을 줍니다. 같은 개수의 요소가 넓게 펼쳐져 깊이가 얕은 DOM보다는 트리의
-                  깊이가 깊은 DOM의 성능이 더 나쁩니다. 다음 두 개의 코드에서 2번째 코드가 성능이 더 나쁩니다. 여<a
-                    href="https://velog.io/@eunbinn/how-deep-is-your-dom"
-                    target="_blank"
-                    rel="noopener"
-                    >기</a
-                  >에 따르면 트리가 넓어질 때보다 깊어질 때 로딩 시간이 훨씬 빠르게 증가합니다. 만약 복잡한 CSS 선택자가
-                  추가된다면 차이는 더 심해질 것입니다.
-                </p>
-                <pre
-                  class="xml"
-                ><code class="hljs"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-    <span class="hljs-comment">&lt;!-- ... --&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>5000번째 div.<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-  <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></code></pre>
-                <pre
-                  class="xml"
-                ><code class="hljs"><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
-          <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
-            <span class="hljs-comment">&lt;!-- ... --&gt;</span>
-            <span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>5000번째 div.<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-          <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-      <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-  <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
-<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span></code></pre>
-                <p data-ke-size="size16">
-                  DOM의 깊이가 깊으면 HTML을 파싱한 뒤, 브라우저가 요소 간의 관계를 파악하고 스타일을 적용하는 데 더
-                  많은 계산을 해야 합니다. 그 결과 HTML 문서의 초기 로딩 시간을 증가시키고 깊은 DOM은 그대로 리렌더링의
-                  비용이 되어 성능을 악화시킵니다. DOM의 깊이를 줄이기 위해서는 불필요한 요소를 제거하고 CSS와
-                  JavaScript를 통해 재사용 가능한 구성 요소를 사용하는 것이 좋습니다.
-                </p>
-                <h2 data-ke-size="size26" id="H2-1309">CSS와 성능</h2>
-                <h3 data-ke-size="size23" id="H3-1368">CSS 선택자</h3>
-                <p data-ke-size="size16">
-                  CSS 선택자는 HTML 요소에 스타일을 적용하기 위한 도구입니다. 그러나 선택자가 복잡할수록 브라우저가
-                  스타일을 적용하는 데 더 많은 시간을 들이게 됩니다. 예를 들어, 후손 선택자(div ul li a)나 속성
-                  선택자(input[type="text"])와 같이 구체적인 조건을 사용하는 선택자는 브라우저가 모든 요소를 탐색하며
-                  조건에 맞는 요소를 검사하도록 만듭니다. 필요한 경우에는 사용하는 것이 좋지만 보다 간단한 선택자인 ID
-                  선택자, 클래스 선택자, 태그 선택자와 같이 단순한 선택자를 사용하는 것이 성능에 유리합니다. 특히 후손
-                  선택자는 DOM의 깊이가 깊고 후손이 많을 수록 성능에 악영향을 주므로 자식 선택자(&gt;)나 형제 선택자(+,
-                  ~)를 사용해 범위를 좁히는 것이 좋습니다.
-                </p>
-                <h3 data-ke-size="size23" id="H3-1625">CSS 애니메이션과 트랜지션</h3>
-                <p data-ke-size="size16">
-                  CSS 애니메이션이나 트랜지션을 사용할 때, 부적절한 사용은 페이지 성능을 저하시킬 수 있습니다. 특히,
-                  애니메이션이 레이아웃을 변경하게 되면 브라우저는 Reflow와 Repaint를 반복하게 되어 성능이 저하됩니다.
-                  대신, transform, opacity와 같은 속성은 GPU 가속을 활용할 수 있어 성능 저하를 최소화할 수 있습니다.
-                  예를 들어, 위치를 변경하는 애니메이션에서 top이나 left 대신 transform: translate()를 사용하는 것이
-                  좋습니다. 애니메이션의 경우 화면에 보일 경우에만 애니메이션이 적용되도록 하여 성능을 개선할 수
-                  있습니다.
-                </p>
-                <h3 data-ke-size="size23" id="H3-1852">레이아웃 변동</h3>
-                <p data-ke-size="size16">
-                  레이아웃 변동(Layout Shift)은 페이지가 사용자 인터페이스를 표시한 후에도 요소들이 이동하는 현상을
-                  말합니다. CSS에서 크기, 위치 등의 속성이 동적으로 변경되면, 브라우저는 레이아웃과 페인트 과정을
-                  반복하게 됩니다. 이러한 변동은 브라우저가 Reflow(레이아웃 계산)와 Repaint(화면 갱신)를 반복하게 만들어
-                  성능에 악영향을 미칩니다. 특히 Reflow는 더 큰 비용이 과정으로 요소의 크기 변경과 위치의 변경은 색상
-                  변경이나 border의 추가/삭제보다 성능에 더 나쁜 영향을 미칩니다.
-                </p>
-                <blockquote data-ke-style="style3">
-                  <b>Reflow<br /></b> 페이지의 레이아웃을 계산하는 과정으로 DOM 요소의 크기와 위치를 결정<br />텍스트
-                  내용 변경, 새로운 요소 추가, `display` 속성 변경, 크기 변경 등의 상황에서 발생<br /><b
-                    >Repaint<br /></b
-                  >페이지의 시각적 표현을 업데이트하는 과정으로 요소의 외관(색상, 배경)을 결정<br />요소의 색상, 배경색,
-                  테두리 등을 변경하는 경우에 발생<b><br /></b>
-                </blockquote>
-                <p data-ke-size="size16">&nbsp;</p>
-                <p data-ke-size="size16">&nbsp;</p>
-                <p data-ke-size="size16">
-                  요소의 크기나 위치의 변경을 줄이기 위해, 이미지나 비디오같은 요소의 크기를 명시적으로 지정할 수
-                  있습니다. 요소가 예상치 못하게 이동하는 것은 성능뿐만 아니라 사용자의 경험에도 악영향을 미치기 때문에
-                  주요 컨텐츠를 표시하는 요소의 크기를 지정하여 레이아웃의 변동을 최소화하는 것이 좋습니다.
-                </p>
-                <h3 data-ke-size="size23" id="H3-2430">이미지</h3>
-                <p data-ke-size="size16">
-                  이미지는 웹 페이지 성능에 큰 영향을 미치는 요소 중 하나입니다. 이미지 최적화를 통해 페이지 로딩 시간을
-                  단축하고, 전반적인 성능을 개선할 수 있습니다. 이미지와 관련하여 성능을 개선하기 가장 쉬운 방법 중
-                  하나는 WebP와 같은 형식의 이미지 파일을 사용하는 것입니다. WebP는 웹에 최적화된 이미지 파일로 작은
-                  크기를 가지고 있어 다른 이미지 형식에 비해 더 빠르게 로딩할 수 있습니다.
+                  Flutter에서 MVVM (Model-View-ViewModel) 패턴을 사용하는 것은 앱의 구조를 더 잘 조직하고, 유지보수성을
+                  향상시킬 수 있습니다.
                 </p>
                 <p data-ke-size="size16">&nbsp;</p>
+                <h2 data-ke-size="size26" id="H2-405">MVVM 패턴</h2>
                 <p data-ke-size="size16">
-                  또 다른 간단한 방법은 이미지 태그에 <code>loading="lazy"</code> 속성을 추가하여 화면에 보일 때
-                  이미지를 로딩하도록 하여 성능을 개선할 수도 있습니다.
-                </p>
-                <p data-ke-size="size16">&nbsp;</p>
-                <p data-ke-size="size16"><b>화면 크기에 따라 다른 이미지 제공</b></p>
-                <p data-ke-size="size16">
-                  다양한 화면 크기와 해상도에 맞춰 적절한 크기의 이미지를 제공함으로써 성능을 최적화할 수 있습니다.
-                  실제로 필요한 크기로 조정된 이미지만을 전송하여 모바일 환경에서의 불필요하게 큰 사이즈의 이미지를
-                  가져올 필요가 없습니다. 단, 각 크기에 맞는 이미지를 미리 가지고 있어야 합니다.
-                </p>
-                <pre
-                  class="routeros"
-                ><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">img</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"image-small.jpg"</span>
-     <span class="hljs-attr">srcset</span>=<span class="hljs-string">"image-small.jpg 480w, image-medium.jpg 800w, image-large.jpg 1200w"</span>
-     <span class="hljs-attr">sizes</span>=<span class="hljs-string">"(max-width: 600px) 480px, (max-width: 1000px) 800px, 1200px"</span>
-     <span class="hljs-attr">alt</span>=<span class="hljs-string">"Responsive example image"</span>&gt;</span></code></pre>
-                <p data-ke-size="size16">&nbsp;</p>
-                <p data-ke-size="size16">
-                  <b>이미지 스프라이트</b><br />여러 개의 작은 이미지를 하나의 큰 이미지 파일로 결합한 후, CSS를 사용해
-                  해당 이미지의 일부만을 표시하는 기법으로 HTTP 요청 수를 줄여 페이지 로딩 속도를 개선하는 데
-                  유용합니다.하지만 새로운 아이콘이나 이미지가 추가될 때마다 스프라이트 이미지를 재생성해야 하므로
-                  유지보수가 번거로울 수 있습니다. 하나의 이미지를 가져온 뒤 필요한 부분만 사용합니다.
-                </p>
-                <pre class="css"><code class="hljs"><span class="hljs-selector-class">.icon</span> {
-    <span class="hljs-attribute">background-image</span>: <span class="hljs-built_in">url</span>(<span class="hljs-string">'sprite.png'</span>);
-    <span class="hljs-attribute">background-repeat</span>: no-repeat;
-}
-
-<span class="hljs-selector-class">.icon-home</span> {
-    <span class="hljs-attribute">width</span>: <span class="hljs-number">32px</span>;
-    <span class="hljs-attribute">height</span>: <span class="hljs-number">32px</span>;
-    <span class="hljs-attribute">background-position</span>: <span class="hljs-number">0</span> <span class="hljs-number">0</span>; <span class="hljs-comment">/* 스프라이트 이미지의 왼쪽 상단 */</span>
-}
-
-<span class="hljs-selector-class">.icon-user</span> {
-    <span class="hljs-attribute">width</span>: <span class="hljs-number">32px</span>;
-    <span class="hljs-attribute">height</span>: <span class="hljs-number">32px</span>;
-    <span class="hljs-attribute">background-position</span>: -<span class="hljs-number">32px</span> <span class="hljs-number">0</span>; <span class="hljs-comment">/* 스프라이트 이미지에서 두 번째 아이콘 */</span>
-}</code></pre>
-                <h2 data-ke-size="size26" id="H2-3410">네트워크 관련</h2>
-                <h3 data-ke-size="size23" id="H3-3468">파일의 크기</h3>
-                <p data-ke-size="size16">
-                  웹 페이지의 성능을 높이기 위해 파일 크기를 줄이는 것은 매우 중요합니다. 특히, HTML, CSS, JavaScript
-                  파일의 크기를 줄이는 방법을 살펴봅니다. CSS와 JavaScript 파일에서 불필요한 공백, 주석, 줄바꿈을
-                  제거하면 하고 변수명을 짧게 줄여 파일 크기를 줄일 수 있습니다. WebPack과 같은 번들러에는 이런 기능이
-                  기본적으로 내장되어 있어 쉽게 적용할 수 있습니다. 그 외에도 파일 자체를 압축하거나 코드 스플리팅을
-                  사용할 수 있습니다. 자세한 내용은
-                  <a
-                    href="https://curt-poem.tistory.com/entry/%EC%9B%B9%EC%82%AC%EC%9D%B4%ED%8A%B8-%EC%84%B1%EB%8A%A5-%EA%B0%9C%EC%84%A0-%ED%8C%8C%EC%9D%BC-%ED%81%AC%EA%B8%B0-%EC%A4%84%EC%9D%B4%EA%B8%B0"
-                    >웹사이트 성능 개선 - 파일 크기 줄이기(코드스플리팅과 압축)</a
-                  >를 참고하세요.
-                </p>
-                <h3 data-ke-size="size23" id="H3-3695">HTTP 요청의 개수</h3>
-                <p data-ke-size="size16">
-                  HTTP 요청이 많아지면 브라우저와 서버 간의 통신이 빈번해져 성능이 저하될 수 있습니다. 초기의 HTTP
-                  요청은 최대 연결 개수가 6개로 정해져있어 한 페이지에서 HTTP 요청이 6개를 넘어가면 다음 요청은
-                  대기하여야 했습니다. 그래서 너무 많은 HTTP 요청은 로딩 시간을 크게 늘릴 수 있었습니다. 하지만 HTTP/2
-                  버전 이후로는 이 제한이 크게 줄었습니다. 그럼에도 불구하고 HTTP 요청은 여러 비용이 발생합니다.
-                </p>
-                <p data-ke-size="size16">&nbsp;</p>
-                <p data-ke-size="size16">
-                  먼저 최초 연결시 TCP 연결(3-way 핸드셰이크, TCP Slow Start)에서 비용이 발생합니다. 물론 HTTP/2 및
-                  HTTP/3에서는 단일 연결에서 다중 요청을 처리할 수 있으므로, 동일한 도메인에 대한 여러 HTTP 요청이 있을
-                  때 추가적인 TCP 연결 설정 오버헤드가 발생하지 않습니다. DNS 조회도 마찬가지입니다. 도메인 주소를
-                  브라우저가 캐싱하므로 최초의 요청에만 DNS 조회 비용이 더 클 것입니다. 여기까지의 비용은 고정
-                  비용이므로 HTTP 요청의 개수가 영향을 미칠 것 같지는 않습니다.
-                </p>
-                <p data-ke-size="size16">&nbsp;</p>
-                <p data-ke-size="size16">
-                  하지만 HTTP 요청에는 변동 비용 또한 존재합니다. 변동 비용은 각 요청마다 발생하며, HTTP 요청의 개수만큼
-                  증가하는 비용입니다. 모든 HTTP 요청은 헤더가 존재합니다. 이 헤더를 작성하고 압축하는 것에 대한 비용은
-                  HTTP 요청이 많아질 수록 같이 증가합니다. 그리고 여러 요청이 같은 본문(body)를 가지면 불필요한 중복
-                  비용이 발생하는 것입니다. 여기에 더해 HTTPS 요청에서 발생하는 암호화도 분명히 존재하는 비용입니다.
-                  이런 요소들이 엄청나게 큰 비용은 아닐지라도 어렵지 않게 줄일 수 있는 비용이기에 성능 개선에서 생각해
-                  볼 만한 요소입니다. 그리고 요청의 개수는 웹 페이지의 성능 뿐만 아니라 서버의 성능에도 영향을 줄 수
-                  있습니다. 요청의 개수가 줄어들면 브라우저의 오버헤드 뿐만 아니라 서버가 각 요청을 받고 응답을 보내는
-                  데에 존재하는 오버헤드 역시 줄어들게 됩니다.
-                </p>
-                <h2 data-ke-size="size26" id="H2-4255">Google Lighthouse로 성능 측정해보기</h2>
-                <p data-ke-size="size16">
-                  <span style="color: #333333; text-align: start"
-                    >이제까지 성능 개선을 위한 일반적이고 널리 알려진 방법을 살펴보았습니다. 성능을 개선하는 만큼 중요한
-                    것은 성능이 얼마나 개선되었는지 확인하는 것입니다.<span>&nbsp;</span></span
-                  >
+                  MVVM 패턴에서는 서버 등 비즈니스 로직과 관련된 데이터를 포함한 비즈니스 로직은 Model이, UI는 View가
+                  담당합니다. 그리고 둘 사이에 ViewModel이 존재합니다. ViewModel은 UI 로직을 가지며, Model의 데이터를
+                  가공하여 View에 제공하는 역할을 합니다. ViewModel의 상태 변화가 View에 즉시 반영되고 View의 상호작용이
+                  ViewModel에 반영되는 양방향 상호작용을 가집니다. View는 Model에 직접 접근하지 않고 ViewModel을 통해
+                  가공된 형태로 접근할 수 있습니다. 이를 통해 View와 Model의 결합도를 낮추고 UI와 분리된 비즈니스
+                  로직으로 각자의 변화가 서로에게 영향을 미치지 못하도록 막습니다.
                 </p>
                 <p></p>
                 <figure
                   class="imageblock alignCenter"
                   data-ke-mobilestyle="widthOrigin"
-                  data-origin-width="323"
-                  data-origin-height="222"
+                  data-origin-width="724"
+                  data-origin-height="495"
                 >
                   <span
-                    data-url="https://blog.kakaocdn.net/dn/prVSD/btsJnFFbOof/xUrc6UaznKs9bpsLkTBq2k/img.png"
-                    data-phocus="https://blog.kakaocdn.net/dn/prVSD/btsJnFFbOof/xUrc6UaznKs9bpsLkTBq2k/img.png"
-                    data-alt="perfomance 탭의 측 정후 Summary 보기 - Naver 메인화면의 측정 결과"
+                    data-url="https://blog.kakaocdn.net/dn/9hDhw/btsG7A7jdq5/LkBiex9AkGx54A1Yft4kZk/img.png"
+                    data-phocus="https://blog.kakaocdn.net/dn/9hDhw/btsG7A7jdq5/LkBiex9AkGx54A1Yft4kZk/img.png"
+                    data-alt="clopilot이 마음에 드는 그림 안그려줘서 직접 그려봤습니다."
                     ><img
-                      src="https://blog.kakaocdn.net/dn/prVSD/btsJnFFbOof/xUrc6UaznKs9bpsLkTBq2k/img.png"
+                      src="https://blog.kakaocdn.net/dn/9hDhw/btsG7A7jdq5/LkBiex9AkGx54A1Yft4kZk/img.png"
                       srcset="
-                        https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&amp;fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FprVSD%2FbtsJnFFbOof%2FxUrc6UaznKs9bpsLkTBq2k%2Fimg.png
+                        https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&amp;fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F9hDhw%2FbtsG7A7jdq5%2FLkBiex9AkGx54A1Yft4kZk%2Fimg.png
                       "
                       onerror="this.onerror=null; this.src='//t1.daumcdn.net/tistory_admin/static/images/no-image-v1.png'; this.srcset='//t1.daumcdn.net/tistory_admin/static/images/no-image-v1.png';"
-                      data-origin-width="323"
-                      data-origin-height="222"
+                      width="500"
+                      height="342"
+                      data-origin-width="724"
+                      data-origin-height="495"
                       data-phocus-index="0"
                   /></span>
-                  <figcaption>perfomance 탭의 측 정후 Summary 보기 - Naver 메인화면의 측정 결과</figcaption>
+                  <figcaption>clopilot이 마음에 드는 그림 안그려줘서 직접 그려봤습니다.</figcaption>
                 </figure>
                 <p></p>
+                <h2 data-ke-size="size26" id="H2-1031">MVVM 패턴의 구성 요소</h2>
+                <h3 data-ke-size="size23" id="H3-1090">Model</h3>
                 <p data-ke-size="size16">
-                  크롬의 개발자 도구의 Perfomance 탭과 Mermory을 이용하여 페이지의 로딩 시간과 메모리 사용량을 확인할
-                  수도 있지만 전반적인 개선점까지 제안해주는 Lighthouse를 참고하는 것도 좋습니다. 특히 Lighthouse는
-                  접근성과 SEO 등 성능을 제외한 웹 사이트 평가 지표도 가지고 있습니다.
+                  Model은 앱에서 사용되는 데이터와 비즈니스 로직을 처리합니다. 네트워크 요청, 데이터베이스 관리 등을
+                  담당하며, 각 데이터를 Dart 객체로 변환하여 ViewModel에 전달합니다. Model 클래스는 데이터를 나타내는
+                  것이죠! Model을 통해 데이터를 인스턴스화하고 나면 해당 데이터를 Flutter 내부에서 쉽게 사용할 수 있게
+                  됩니다. 쉽게 말하면 Model은 ViewModel에 데이터를 전달해주기 위해 데이터를 가져오고 Dart의 객체로
+                  만들어주는 역할을 합니다. 데이터 자체와 관련된 로직만을 담당하는 것이죠. 따라서 모델은 View 및
+                  ViewModel과 완전히 독립적이어야 하며 데이터 자체와 관련된 로직만 포함해야 합니다.
                 </p>
-                <p></p>
-                <figure
-                  class="imageblock alignCenter"
-                  data-ke-mobilestyle="widthOrigin"
-                  data-origin-width="755"
-                  data-origin-height="292"
-                >
-                  <span
-                    data-url="https://blog.kakaocdn.net/dn/bJhrH6/btsJnn5Qb4V/8KMy5wF0sH5GjRAi3sfDnK/img.png"
-                    data-phocus="https://blog.kakaocdn.net/dn/bJhrH6/btsJnn5Qb4V/8KMy5wF0sH5GjRAi3sfDnK/img.png"
-                    data-alt="Lighthouse가 평가한 개선이 필요한 사항들 - Naver 메인 화면의 측정 결과"
-                    ><img
-                      src="https://blog.kakaocdn.net/dn/bJhrH6/btsJnn5Qb4V/8KMy5wF0sH5GjRAi3sfDnK/img.png"
-                      srcset="
-                        https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&amp;fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbJhrH6%2FbtsJnn5Qb4V%2F8KMy5wF0sH5GjRAi3sfDnK%2Fimg.png
-                      "
-                      onerror="this.onerror=null; this.src='//t1.daumcdn.net/tistory_admin/static/images/no-image-v1.png'; this.srcset='//t1.daumcdn.net/tistory_admin/static/images/no-image-v1.png';"
-                      data-origin-width="755"
-                      data-origin-height="292"
-                      data-phocus-index="1"
-                  /></span>
-                  <figcaption>Lighthouse가 평가한 개선이 필요한 사항들 - Naver 메인 화면의 측정 결과</figcaption>
-                </figure>
-                <figure
-                  class="imageblock widthContent"
-                  data-ke-mobilestyle="widthOrigin"
-                  data-filename="lighthouse_100_100_100_100_cut.gif"
-                  data-origin-width="1278"
-                  data-origin-height="381"
-                >
-                  <span
-                    data-url="https://blog.kakaocdn.net/dn/cEvwmY/btsJngFS5qI/k79yOCi4HJcv5KeSC8Kbfk/img.gif"
-                    data-phocus="https://blog.kakaocdn.net/dn/cEvwmY/btsJngFS5qI/k79yOCi4HJcv5KeSC8Kbfk/img.gif"
-                    data-alt="Lighthouse로 측정한 웹사이트 점수, 모든 항목에서 만점을 맞으면 폭죽이 터진다. - 프로젝트로 진행했던 웹페이지 측정 결과"
-                    ><img
-                      src="https://blog.kakaocdn.net/dn/cEvwmY/btsJngFS5qI/k79yOCi4HJcv5KeSC8Kbfk/img.gif"
-                      srcset="https://blog.kakaocdn.net/dn/cEvwmY/btsJngFS5qI/k79yOCi4HJcv5KeSC8Kbfk/img.gif"
-                      onerror="this.onerror=null; this.src='//t1.daumcdn.net/tistory_admin/static/images/no-image-v1.png'; this.srcset='//t1.daumcdn.net/tistory_admin/static/images/no-image-v1.png';"
-                      data-filename="lighthouse_100_100_100_100_cut.gif"
-                      data-origin-width="1278"
-                      data-origin-height="381"
-                      data-phocus-index="2"
-                  /></span>
-                  <figcaption>
-                    Lighthouse로 측정한 웹사이트 점수, 모든 항목에서 만점을 맞으면 폭죽이 터진다. - 프로젝트로 진행했던
-                    웹페이지 측정 결과
-                  </figcaption>
-                </figure>
-                <p></p>
-                <h2 data-ke-size="size26" id="H2-5479">참고 자료</h2>
+                <p data-ke-size="size16">&nbsp;</p>
                 <p data-ke-size="size16">
-                  MDN,
-                  <a href="https://developer.mozilla.org/en-US/docs/Learn/Performance/Perceived_performance"
-                    >Perceived performance</a
-                  >,
-                  <a href="https://developer.mozilla.org/ko/docs/Learn/Performance/Measuring_performance"
-                    >웹 성능 측정하기</a
-                  >,
-                  <a href="https://developer.mozilla.org/en-US/docs/Learn/Performance/HTML"
-                    >HTML performance optimization</a
-                  >,
-                  <a href="https://developer.mozilla.org/en-US/docs/Learn/Performance/CSS"
-                    >CSS performance optimization</a
-                  ><br />stack overflow,
-                  <a
-                    href="https://stackoverflow.com/questions/11351745/if-requests-are-asynchronous-why-does-reducing-the-number-of-http-requests-a-pa"
-                    >If requests are asynchronous, why does reducing the number of http requests a page needs to load
-                    improve performance?</a
-                  >,&nbsp;<a
-                    style="color: #0070d1; text-align: start"
-                    href="https://stackoverflow.com/questions/2549296/whats-the-difference-between-reflow-and-repaint"
-                    >What's the difference between reflow and repaint?</a
+                  Model은
+                  <span style="background-color: #ffffff; color: #0d0d0d; text-align: left"
+                    >데이터를 표현하고 캡슐화하는</span
+                  >
+                  Model,
+                  <span style="background-color: #ffffff; color: #0d0d0d; text-align: left"
+                    >데이터 액세스를 추상화하고 관리하여 데이터와의 상호 작용을 담당하는 Repository, 비지니스 로직과
+                    외부 리소스와의 통신을 담당하는 Service로 나뉩니다. Model은 서비스의 규모에 따라
+                    <span style="background-color: #ffffff; color: #0d0d0d; text-align: left"
+                      >Service와
+                      <span style="background-color: #ffffff; color: #0d0d0d; text-align: left"
+                        >Repository를 한 번에 관리하기도 합니다.</span
+                      ></span
+                    ></span
                   >
                 </p>
+                <h3 data-ke-size="size23" id="H3-1437">View</h3>
                 <p data-ke-size="size16">
-                  <a
-                    style="background-color: #e6f5ff; color: #0070d1; text-align: start"
-                    href="https://velog.io/@eunbinn/how-deep-is-your-dom"
-                    >[번역] 당신의 DOM은 얼마나 깊은가요</a
+                  사용자 인터페이스(UI)를 담당합니다. View는 ViewModel을 통해 제공된 데이터를 사용자에게 보여주고,
+                  사용자의 입력을 ViewModel로 전달합니다. 그러고나면 ViewModel에서 사용자의 입력에 대한 적절한 처리가
+                  되고 바뀐 상태가 있다면 View는 상태 변화 알림을 받아 화면을 업데이트합니다. View에서는 데이터를 표시할
+                  뿐만 아니라 사용자의 입력에 따라 ViewModel의 어떤 로직을 사용하여야 하는지 통제하는 역할을 합니다.
+                  View는 Model 및 ViewModel과 완전히 독립적이어야 하며 데이터 표시와 관련된 요소만 포함해야 합니다.
+                </p>
+                <h3 data-ke-size="size23" id="H3-1664">ViewModel</h3>
+                <p data-ke-size="size16">
+                  View와 Model 사이의 중계자 역할을 합니다. ViewModel은 Model로부터 데이터를 받아와서 이를 View가 쉽게
+                  사용할 수 있도록 도와줍니다. ViewModel은 View의 상태 관리를 담당하며, 사용자의 입력을 기반으로 모델을
+                  업데이트합니다. 즉 뷰에서 전해받은 사용자의 입력에 대한 액션을 수행하고 (자신이 소유하고 있는)상태를
+                  업데이트합니다. 그리고나면 상태의 변화를 View에 전파하여 VIew가 화면을 다시 그릴수 있도록 합니다.
+                  따라서 VIewModel은 View에 대한 Model 데이터 변환과 관련된 논리만 포함해야 합니다. 추가적으로
+                  ViewModel은 여러 View에서 사용될 수 있습니다. 바로 여러 스크린 또는 페이지(View)에서 같은 데이터를
+                  사용할 때입니다.
+                </p>
+                <h3 data-ke-size="size23" id="H3-1891">또 다른 규칙</h3>
+                <p data-ke-size="size16">
+                  ViewModel과 View 사이의 데이터 바인딩은 ViewModel이 View에 접근하지 않고 서로 다른 ViewModel 간에
+                  데이터를 참조하지 않습니다. 만약 데이터를 공유하여야 한다면 부모 View 혹은 아래의 Model을 이용하여야
+                  하죠. 데이터 바인딩이 잘 구현되었는지 여부는 ViewModel 안에 View에 대한 의존성으로 확인할 수 있습니다.
+                  ViewModel은 View에 대한 의존성이 없어야 하죠. ViewModel은 View의 상태와 View를 업데이트하는 로직만을
+                  가지고 있어야합니다. 그렇게 되어 있다면 View가 어떻게 생겼는지와는 관계없이 ViewModel을 재활용할 수
+                  있게 됩니다.
+                </p>
+                <h2 data-ke-size="size26" id="H2-2121">MVVM 패턴의 장점</h2>
+                <p data-ke-size="size16">
+                  MVVM 패턴을 사용한다는 것은 <b>데이터 바인딩</b>을 통한 <b>UI와 비즈니스 로직의 분리</b>를 의미합니다.
+                  이는 개발 과정에서의 오류를 줄이고 더 깔끔한 구조를 유지할 수 있게 합니다. ViewModel을 통한 상태
+                  관리는 애플리케이션의 다양한 UI 컴포넌트 간의 일관된 데이터 흐름을 보장하며, 테스트와 확장성
+                  측면에서도 이점을 제공합니다.
+                </p>
+                <p data-ke-size="size16">&nbsp;</p>
+                <p data-ke-size="size16">
+                  MVVM의 <b>느슨하게 결합된 아키텍처</b>를 촉진하여 코드의 유연성과 재사용성을 향상시킵니다. MVVM을
+                  사용함으로써 Model 또는 ViewModel을 변경해도 View에 영향을 주지 않으며, View를 변경해도 Model 또는
+                  ViewModel에 영향을 주지 않습니다. 즉 다른 구성 요소에 영향을 주지 않고 하나의 구성 요소를 쉽게 변경할
+                  수 있으며, 동일한 Model 및 ViewModel에 대해 서로 다른 View를 사용할 수 있습니다. 다른 크기의 화면에
+                  대해 동일한 Model과 ViewModel을 사용하고 다른 VIew를 사용하는 방삭으로 말이죠.
+                </p>
+                <p data-ke-size="size16">&nbsp;</p>
+                <p data-ke-size="size16">
+                  MVVM의 또 다른 장점은 앱의 다양한 구성 요소를 더 쉽게 테스트할 수 있다는 것입니다. Model, View,
+                  ViewModel이 분리되어 있어 독립적으로 테스트가 가능합니다. 즉, 모델은 단위 테스트로 테스트할 수 있고,
+                  View 및 ViewModel은 통합 테스트로 테스트할 수 있습니다. ViewModel은 모의 개체를 사용하여 테스트할 수
+                  있으므로 실제 View 없이도 ViewModel의 논리를 테스트할 수 있습니다.
+                </p>
+                <h2 data-ke-size="size26" id="H2-2565">MVVM 패턴의 구현</h2>
+                <p data-ke-size="size16">
+                  Flutter에서 MVVM을 구현하기 위해서 Provider를 사용하거나 큰 프로젝트인 경우 BLoC를 사용하는 것
+                  같습니다. 그런데 저는 Provider의 개선된 버전인 riverpod을 공부하기 위해 이번 프로젝트에서는 riverpod을
+                  사용해보았습니다. 사실 처음으로 Flutter 프로젝트를 진행하면서 Provider보다 riverPod이 더 사용하기
+                  쉬워보였기 때문에 선택한 것입니다. 하지만 riverpod은 provider와 달리 상태를 전역으로 관리하기 때문에
+                  MVVM패턴을 적용할 때 메모리에 더 신경을 써야했습니다. 그래서 autoDispose를 활용해 더 이상 참조되지
+                  않는 Provider는 메모리에서 해제되게 하였습니다.
+                </p>
+                <p data-ke-size="size16">&nbsp;</p>
+                <p data-ke-size="size16">
+                  Flutter를 처음 사용하는 입장에서 완전하게 구현된 MVVM패턴은 아니지만 riverpod을 이용해 UI와 로직을
+                  분리하는 데 참고가 되었으면 합니다.
+                  <a href="https://randomfox.ca/" target="_blank" rel="noopener">랜덤한 여우 사진을 보내주는 api</a>를
+                  활용하였습니다. + 버튼을 누르면 랜덤한 여우 사진을 불러와 화면에 추가하는 아주 간단한 화면입니다.
+                </p>
+                <p data-ke-size="size16">&nbsp;</p>
+                <p data-ke-size="size16">ps. dio와 riverpod이 필요합니다.</p>
+                <h3 data-ke-size="size23" id="H3-2977">View</h3>
+                <p data-ke-size="size16">ViewModel로 부터 데이터를 받아 화면에 표시하는 역할만을 합니다.</p>
+                <pre
+                  class="javascript"
+                  data-ke-language="javascript"
+                ><code class="hljs"><span class="hljs-comment">// view.dart</span>
+
+<span class="hljs-keyword">import</span> <span class="hljs-string">'package:flutter/material.dart'</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-string">'package:flutter_application_1/src/MVVM/viewModel.dart'</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-string">'package:flutter_riverpod/flutter_riverpod.dart'</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyView</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ConsumerWidget</span> </span>{
+<span class="hljs-keyword">const</span> MyView({<span class="hljs-built_in">super</span>.key});
+
+@override
+Wid<span class="hljs-keyword">get</span> <span class="hljs-title">build</span>(<span class="hljs-params">BuildContext context, WidgetRef ref</span>) {
+<span class="hljs-keyword">var</span> viewModel = ref.watch(foxViewModelProvider);
+<span class="hljs-keyword">return</span> SafeArea(
+  child: Container(
+    color: Colors.white,
+    <span class="hljs-attr">alignment</span>: Alignment.center,
+    <span class="hljs-attr">child</span>: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      <span class="hljs-attr">children</span>: [
+        Text(
+          <span class="hljs-string">'여우 사진의 개수: ${viewModel.foxImagesCount}'</span>,
+          <span class="hljs-attr">style</span>: <span class="hljs-keyword">const</span> TextStyle(
+            color: Colors.black,
+            <span class="hljs-attr">decoration</span>: TextDecoration.none,
+            <span class="hljs-attr">fontSize</span>: <span class="hljs-number">28</span>,
+          ),
+        ),
+        IconButton(
+            onPressed: () {
+              viewModel.fetchingMoreCatImage();
+            },
+            <span class="hljs-attr">icon</span>: <span class="hljs-keyword">const</span> Icon(Icons.add)),
+        Expanded(
+          child: ListView.builder(
+            itemBuilder: (BuildContext context, int index) {
+              <span class="hljs-keyword">return</span> Image.network(
+                viewModel.getFoxImage(index),
+                <span class="hljs-attr">height</span>: <span class="hljs-number">300</span>,
+                <span class="hljs-attr">fit</span>: BoxFit.contain,
+              );
+            },
+            <span class="hljs-attr">itemCount</span>: viewModel.foxImagesCount,
+          ),
+        )
+      ],
+    ),
+  ),
+);
+}
+}</code></pre>
+                <h3 data-ke-size="size23" id="H3-4054">ViewModel</h3>
+                <p data-ke-size="size16">repository를 만들어 해당 레포지토리에서 데이터를 가져옵니다.&nbsp;</p>
+                <pre
+                  id="code_1714907175260"
+                  class="javascript"
+                  data-ke-language="javascript"
+                  data-ke-type="codeblock"
+                ><code class="hljs"><span class="hljs-comment">// viewModel.dart</span>
+
+<span class="hljs-keyword">import</span> <span class="hljs-string">'package:flutter/material.dart'</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-string">'package:flutter_application_1/src/MVVM/repository.dart'</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-string">'package:flutter_riverpod/flutter_riverpod.dart'</span>;
+
+final foxViewModelProvider = ChangeNotifierProvider(<span class="hljs-function">(<span class="hljs-params">ref</span>) =&gt;</span> FoxViewModel());
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FoxViewModel</span> <span class="hljs-title">with</span> <span class="hljs-title">ChangeNotifier</span> </span>{
+<span class="hljs-keyword">var</span> foxRepository = FoxRepository();
+
+int get foxImagesCount =&gt; foxRepository.foxImageUrlList.length;
+
+<span class="hljs-built_in">String</span> getFoxImage(int index) =&gt; foxRepository.foxImageUrlList[index].image;
+
+<span class="hljs-keyword">void</span> fetchingMoreCatImage() <span class="hljs-keyword">async</span> {
+<span class="hljs-keyword">await</span> foxRepository.addFoxImage();
+<span class="hljs-comment">// 이미지를 추가하고 구독(watch)하고 있는 View에게 변화를 알려줍니다.</span>
+notifyListeners();
+}
+}</code></pre>
+                <h3 data-ke-size="size23" id="H3-4580">Model</h3>
+                <h4 data-ke-size="size20">Model</h4>
+                <p data-ke-size="size16">
+                  받은 데이터를 Dart 코드 상에서 쉽게 사용할 수 있도록 인스턴스화합니다.
+                  <span style="background-color: #ffffff; color: #0d0d0d; text-align: left">
+                    데이터의 구조와 속성을 정의하고 관리합니다.</span
+                  >
+                </p>
+                <pre
+                  id="code_1714907224238"
+                  class="javascript"
+                  data-ke-language="javascript"
+                  data-ke-type="codeblock"
+                ><code class="hljs"><span class="hljs-comment">// model.dart</span>
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Fox</span> </span>{
+final <span class="hljs-built_in">String</span> image;
+
+Fox(<span class="hljs-built_in">this</span>.image);
+
+factory Fox.fromJson(<span class="hljs-built_in">Map</span>&lt;<span class="hljs-built_in">String</span>, dynamic&gt; json) {
+<span class="hljs-keyword">return</span> Fox(json[<span class="hljs-string">'image'</span>]);
+}
+}</code></pre>
+                <h4 data-ke-size="size20">Repository</h4>
+                <p data-ke-size="size16">
+                  데이터 저장과 접근에 대한 로직을 추상화합니다.
+                  <span style="background-color: #ffffff; color: #0d0d0d; text-align: left"
+                    >데이터를 로컬 저장소나 원격 서버에서 가져오거나 저장하는 등의 작업을 수행합니다. 다음 예시 코드와
+                    같이 작은 규모에서는 Service가 따로 분리되지 않고 Repository에 속할 수도 있습니다.
+                    <span style="color: #ee2323"
+                      ><span style="color: #000000"
+                        ><span style="background-color: #ffffff; color: #0d0d0d; text-align: left"
+                          >데이터를 조회하고 클라이언트가 사용할 수 있도록 저장할 때 일관된 접근 방식을 정하는 역할을
+                          합니다.</span
+                        ></span
+                      ></span
+                    ></span
+                  >
+                </p>
+                <pre
+                  id="code_1714907243521"
+                  class="javascript"
+                  data-ke-language="javascript"
+                  data-ke-type="codeblock"
+                ><code class="hljs"><span class="hljs-comment">// repository.dart</span>
+
+<span class="hljs-keyword">import</span> <span class="hljs-string">'package:dio/dio.dart'</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-string">'package:flutter/material.dart'</span>;
+<span class="hljs-keyword">import</span> <span class="hljs-string">'package:flutter_application_1/src/MVVM/model.dart'</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">FoxRepository</span> </span>{
+List&lt;Fox&gt; foxImageUrlList = [];
+
+Dio dio = Dio();
+
+Future&lt;<span class="hljs-keyword">void</span>&gt; addFoxImage() <span class="hljs-keyword">async</span> {
+<span class="hljs-keyword">try</span> {
+  <span class="hljs-keyword">var</span> response = <span class="hljs-keyword">await</span> dio.get(<span class="hljs-string">'https://randomfox.ca/floof/'</span>);
+  foxImageUrlList.add(Fox.fromJson(response.data));
+} <span class="hljs-keyword">catch</span> (err, stackTrace) {
+  debugPrint(<span class="hljs-string">'에러 $err, $stackTrace'</span>);
+}
+}
+}</code></pre>
+                <h4 data-ke-size="size20">Service</h4>
+                <p data-ke-size="size16">
+                  비지니스 로직, 외부와의 연결을 담당을 담당하는 계층입니다. Repository에서 가져온 데이터를 처리하고
+                  규칙을 적용합니다. 사용자 인증, 복잡한 계산, 여러 소스에서 온 데이터의 통합 등이 이루어집니다.
+                  일반적으로 비지니스 로직 또는 앱의 전역 상태등을 담당합니다. 애플리케이션의 규모가 큰 경우
+                  <span style="background-color: #ffffff; color: #0d0d0d; text-align: start"
+                    >데이터를 관리하고 처리하는 로직을 캡슐화하여 ViewModel과 Model 간의 연결 고리 역할을 하게 됩니다.
+                    Repository가 백엔드와 통신하고 Service가 Repository에 접근하여 ViewModel에 데이터를 가져다 주는
+                    것이죠.</span
+                  >
+                </p>
+                <p data-ke-size="size16">&nbsp;</p>
+                <p data-ke-size="size16">
+                  <span style="background-color: #ffffff; color: #0d0d0d; text-align: start"
+                    >예시 코드는 규모가 작아 굳이 Service를 추가하지 않았지만 만약 Service가 추가된다면 viewModel이
+                    Service를 통해 Respository에 접근하게 됩니다.</span
+                  >
+                </p>
+                <h2 data-ke-size="size26" id="H2-5812">MVVM의 보일러 플레이트</h2>
+                <p data-ke-size="size16">
+                  위의 코드에서 viewModel이 ChangeNotifier 클래스를 믹스인하고 ChangeNotifierProvider를 이용해 해당
+                  클래스의 provider를 전역으로 생성한 뒤, view에서 ref.watch(viewModel)을 사용하는 것이 MVVM의 보일러
+                  플레이트가 될겁니다. 해당 패턴의 자동생성을 위한 base코드를 만들지는 못했지만 간단한 사용으로 MVVM
+                  패턴을 구현할 수 있습니다.
+                </p>
+                <h3 style="color: #000000; text-align: start" data-ke-size="size23" id="H3-5983">
+                  여러 viewModel이 같은 상태를 보아야하고 상태가 계속 유지되어야 하는 경우
+                </h3>
+                <p data-ke-size="size16">
+                  <span style="background-color: #ffffff; color: #0d0d0d; text-align: start"
+                    >Singleton 패턴을 사용하여 Repository 인스턴스를 만들어서 여러 ViewModel이 같은 인스턴스를
+                    참조하도록 구성할 수 있습니다.</span
+                  >
+                </p>
+                <pre
+                  id="code_1715084196073"
+                  class="javascript"
+                  data-ke-language="javascript"
+                  data-ke-type="codeblock"
+                ><code class="hljs"><span class="hljs-comment">// Singleton 패턴을 적용한 Share 클래스</span>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Share</span> </span>{
+Share._();  <span class="hljs-comment">// 생성자를 private으로 설정</span>
+
+<span class="hljs-comment">// instance 생성</span>
+<span class="hljs-comment">// 프라이빗으로 만들어 getter에 의해서만 수정 가능</span>
+<span class="hljs-keyword">static</span> final Share _instance = Share._();
+
+<span class="hljs-keyword">static</span> Share get instance =&gt; _instance;
+}
+
+<span class="hljs-comment">// Share 인스턴스를 제공하는 Provider</span>
+final shareProvider = Provider&lt;Share&gt;((ref) {
+<span class="hljs-keyword">return</span> Share.instance;
+});
+
+final viewModelProvider = ChangeNotifierProvider&lt;ViewModel&gt;((ref) {
+<span class="hljs-keyword">var</span> share = ref.watch(shareProvider);
+<span class="hljs-keyword">return</span> ViewModel(share);
+});</code></pre>
+                <p data-ke-size="size16">
+                  _instance 변수는 static final 키워드로 선언되어 클래스 자체의 인스턴스를 나타내며 프라이빗 생성자이기
+                  떄문에 외부에서 직접 Share 객체를 생성하는 것을 방지합니다. factory 생성자는 _instance 인스턴스를
+                  반환합니다. 즉, 항상 같은 인스턴스를 제공합니다.
+                </p>
+                <p data-ke-size="size16">&nbsp;</p>
+                <p data-ke-size="size16">
+                  싱글톤 패턴을 사용하면 shareProvider가 오랫동안 사용되지 않더라도 가비지 컬렉터에 의해 메모리에서
+                  해제되지 않아 더욱 안정적일 수 있습니다. 해당 인스턴스는 애플리케이션의 종료 전까지 유지됩니다. 다만
+                  <span style="background-color: #ffffff; color: #0d0d0d; text-align: start"
+                    >그만큼 자원을 오랜 시간 동안 점유하고 있어야 한다는 의미이기도 합니다.
+                    <span style="background-color: #ffffff; color: #0d0d0d; text-align: start"
+                      >따라서, 메모리 누수, 데이터 오염과 같은 문제가 발생할 수있어 사용 시에 주의가 필요합니다.</span
+                    ></span
+                  >
+                </p>
+                <h3 data-ke-size="size23" id="H3-6700">
+                  여러 viewModel이 같은 상태를 보아야 하지만 참조되지 않을 때 삭제되어야 하는 경우
+                </h3>
+                <p data-ke-size="size16">
+                  만약 여러 viewModel이 같은 상태의 reposiroy를 보는 등 공유상태가 필요하다면 다음과 같이 사용할 수
+                  있습니다.
+                </p>
+                <pre
+                  class="javascript"
+                  data-ke-language="javascript"
+                ><code class="hljs"><span class="hljs-comment">// autoDispose를 사용하면 해당 provider를 참조하는 View가 없을 때</span>
+<span class="hljs-comment">// 메모리에서 삭제됩니다.</span>
+final shareProvider = Provider.autoDispose((ref) {
+<span class="hljs-comment">// 새로운 Provider를 watch하게 되면 인스턴스가 생성된다.</span>
+final shareRepository = Share();
+<span class="hljs-keyword">return</span> shareRepository;
+});
+
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Share</span> </span>{
+<span class="hljs-comment">// 공유하는 데이터</span>
+}
+
+
+<span class="hljs-comment">// ViewModelProvider1과 ViewModelProvider2는 shareProvider가 같기때문에</span>
+<span class="hljs-comment">// 같은 Share 인스턴스를 보게됩니다.</span>
+<span class="hljs-comment">// 단 ViewModelProvider1과 ViewModelProvider2로 연결되는 사이에</span>
+<span class="hljs-comment">// Share 인스턴스에 대한 참조가 유지되지 않으면 새로운 인스턴스를 보게 됩니다.</span>
+
+final viewModelProvider1 =
+ChangeNotifierProvider.autoDispose&lt;viewModel1&gt;((ref) {
+<span class="hljs-keyword">var</span> share = ref.watch(shareProvider); <span class="hljs-comment">// </span>
+<span class="hljs-keyword">return</span> ViewModel1(share);
+});
+
+final viewModelProvider2 =
+ChangeNotifierProvider.autoDispose&lt;viewModel2&gt;((ref) {
+<span class="hljs-keyword">var</span> share = ref.watch(shareProvider); <span class="hljs-comment">// </span>
+<span class="hljs-keyword">return</span> ViewModel2(share);
+});</code></pre>
+                <p data-ke-size="size16">
+                  Provider를 전역에 생성하거나 인스턴스를 전역에 생성할 수도 있지만 위와 같은 방법으로 생성한다면
+                  사용하지 않을 때는 메모리에서 해제된다는 장점이 있습니다. 또한 싱글톤 패턴보다 테스트가 쉽다는 장점이
+                  있습니다.
+                </p>
+                <h2 data-ke-size="size26" id="H2-7460">참고 자료</h2>
+                <p data-ke-size="size16">
+                  LINE Engineering,
+                  <a href="https://engineering.linecorp.com/ko/blog/flutter-architecture-getx-bloc-provider"
+                    >Flutter 인기 아키텍처 라이브러리 3종 비교 분석 - GetX vs BLoC vs Provider</a
+                  ><br /><a
+                    href="https://medium.com/@Victor.Ahmad/implementing-model-view-viewmodel-mvvm-in-a-flutter-app-a-step-by-step-guide-92b05e6e8192"
+                    >Build a Flutter App using MVVM</a
+                  ><br /><a href="https://medium.com/flutterworld/flutter-mvvm-architecture-f8bed2521958"
+                    >Flutter: MVVM Architecture</a
                   >
                 </p>
               </div>
@@ -2870,13 +2985,13 @@
                     window.ReactionButtonType = "reaction";
                     window.ReactionApiUrl = "//curt-poem.tistory.com/reaction";
                     window.ReactionReqBody = {
-                      entryId: 72,
+                      entryId: 51,
                     };
                   </script>
-                  <div class="wrap_btn" id="reaction-72" data-tistory-react-app="Reaction">
+                  <div class="wrap_btn" id="reaction-51" data-tistory-react-app="Reaction">
                     <button class="btn_post uoc-icon" data-tiara-action-name="공감_클릭">
                       <div class="uoc-icon">
-                        <span class="ico_postbtn ico_like">좋아요</span><span class="txt_like uoc-count">2</span>
+                        <span class="ico_postbtn ico_like">좋아요</span><span class="txt_like uoc-count">공감</span>
                       </div>
                     </button>
                   </div>
@@ -2885,18 +3000,18 @@
                       type="button"
                       class="btn_post sns_btn btn_share"
                       aria-expanded="false"
-                      data-thumbnail-url="https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&amp;fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FprVSD%2FbtsJnFFbOof%2FxUrc6UaznKs9bpsLkTBq2k%2Fimg.png"
-                      data-title="웹성능은 어떻게 개선할수 있을까요?"
-                      data-description="많은 개발자들의 성능 개선을 위해 자바스크립트의 코드를 개선하는 데 집중합니다. 하지만 웹 페이지의 성능에는 자바스크립트 뿐만 아니라 HTML, CSS, 파일의 크기, 네트워크 등 다양한 요소가 영향을 미칩니다. 물론 자바스크립트의 성능에 끼치는 영향이 다른 요소에 비해 큰 경우가 많지만 CSS 또한 분명히 성능에 영향을 끼칩니다. 오늘은 자바스크립트를 제외한 웹 성능을 개선할 때 신경 쓸만한 요소를 살펴보겠습니다.HTML 구조Dom의 깊이HTML 문서의 DOM(Document Object Model) 구조가 복잡하고 깊이가 깊을수록 브라우저가 문서를 렌더링하는 데 더 많은 시간을 소요하게 됩니다. 단순히 DOM에 포함된 HTML 요소의 개수도 영향을 끼치지만 그보다는 어떻게 배치되어 있는 지가 더 큰 .."
+                      data-thumbnail-url="https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&amp;fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F9hDhw%2FbtsG7A7jdq5%2FLkBiex9AkGx54A1Yft4kZk%2Fimg.png"
+                      data-title="Flutter와 MVVM(Model-View-ViewModel) 패턴(with. riverPod)"
+                      data-description="Flutter에서 MVVM (Model-View-ViewModel) 패턴을 사용하는 것은 앱의 구조를 더 잘 조직하고, 유지보수성을 향상시킬 수 있습니다.&nbsp;MVVM 패턴MVVM 패턴에서는 서버 등 비즈니스 로직과 관련된 데이터를 포함한 비즈니스 로직은 Model이, UI는 View가 담당합니다. 그리고 둘 사이에 ViewModel이 존재합니다. ViewModel은 UI 로직을 가지며, Model의 데이터를 가공하여 View에 제공하는 역할을 합니다. ViewModel의 상태 변화가 View에 즉시 반영되고 View의 상호작용이 ViewModel에 반영되는 양방향 상호작용을 가집니다. View는 Model에 직접 접근하지 않고 ViewModel을 통해 가공된 형태로 접근할 수 있습니다. 이를 통해 View.."
                       data-profile-image="https://tistory1.daumcdn.net/tistory/6711062/attach/950d424dabb94a33b5c427a3f00d6c08"
                       data-profile-name="Dovelop"
-                      data-pc-url="https://curt-poem.tistory.com/entry/%EC%9B%B9%EC%84%B1%EB%8A%A5%EC%9D%80-%EC%96%B4%EB%96%BB%EA%B2%8C-%EA%B0%9C%EC%84%A0%ED%95%A0%EC%88%98-%EC%9E%88%EC%9D%84%EA%B9%8C%EC%9A%94"
-                      data-relative-pc-url="/entry/%EC%9B%B9%EC%84%B1%EB%8A%A5%EC%9D%80-%EC%96%B4%EB%96%BB%EA%B2%8C-%EA%B0%9C%EC%84%A0%ED%95%A0%EC%88%98-%EC%9E%88%EC%9D%84%EA%B9%8C%EC%9A%94"
+                      data-pc-url="https://curt-poem.tistory.com/entry/Flutter%EC%99%80-MVVMModel-View-ViewModel-%ED%8C%A8%ED%84%B4"
+                      data-relative-pc-url="/entry/Flutter%EC%99%80-MVVMModel-View-ViewModel-%ED%8C%A8%ED%84%B4"
                       data-blog-title="Curt Poem about Computer"
                     >
                       <span class="ico_postbtn ico_share">공유하기</span>
                     </button>
-                    <div class="layer_post" id="tistorySnsLayer">
+                    <div class="layer_post" id="tistorySnsLayer" style="display: none">
                       <div class="bundle_post">
                         <button
                           class="btn_mark"
@@ -2935,20 +3050,20 @@
                     </div>
                   </div>
                   <div class="wrap_btn">
-                    <button type="button" class="btn_post" data-entry-id="72" data-tiara-action-name="글통계_클릭">
+                    <button type="button" class="btn_post" data-entry-id="51" data-tiara-action-name="글통계_클릭">
                       <span class="ico_postbtn ico_statistics">통계</span>
                     </button>
                   </div>
                   <div
                     class="wrap_btn wrap_btn_etc"
-                    data-entry-id="72"
+                    data-entry-id="51"
                     data-entry-visibility="public"
                     data-category-visibility="public"
                   >
                     <button type="button" class="btn_post btn_etc1" aria-expanded="false">
                       <span class="ico_postbtn ico_etc">게시글 관리</span>
                     </button>
-                    <div class="layer_post" id="tistoryEtcLayer"></div>
+                    <div class="layer_post" id="tistoryEtcLayer" style="display: none"></div>
                   </div>
                 </div>
                 <div class="postbtn_ccl" data-ccl-type="1" data-ccl-derive="2">
@@ -2967,17 +3082,17 @@
                 </div>
                 <!--
 <rdf:RDF xmlns="https://web.resource.org/cc/" xmlns:dc="https://purl.org/dc/elements/1.1/" xmlns:rdf="https://www.w3.org/1999/02/22-rdf-syntax-ns#">
-    <Work rdf:about="">
-        <license rdf:resource="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.ko" />
-    </Work>
-    <License rdf:about="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.ko">
-        <permits rdf:resource="https://web.resource.org/cc/Reproduction"/>
-        <permits rdf:resource="https://web.resource.org/cc/Distribution"/>
-        <requires rdf:resource="https://web.resource.org/cc/Notice"/>
-        <requires rdf:resource="https://web.resource.org/cc/Attribution"/>
-        <prohibits rdf:resource="https://web.resource.org/cc/CommercialUse"/>
+<Work rdf:about="">
+    <license rdf:resource="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.ko" />
+</Work>
+<License rdf:about="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.ko">
+    <permits rdf:resource="https://web.resource.org/cc/Reproduction"/>
+    <permits rdf:resource="https://web.resource.org/cc/Distribution"/>
+    <requires rdf:resource="https://web.resource.org/cc/Notice"/>
+    <requires rdf:resource="https://web.resource.org/cc/Attribution"/>
+    <prohibits rdf:resource="https://web.resource.org/cc/CommercialUse"/>
 
-    </License>
+</License>
 </rdf:RDF>
 -->
                 <div data-tistory-react-app="SupportButton"></div>
@@ -2987,45 +3102,36 @@
               <div class="another_category another_category_color_gray">
                 <h4>
                   '<a href="/category/%EA%B0%9C%EB%B0%9C">개발</a> &gt;
-                  <a href="/category/%EA%B0%9C%EB%B0%9C/%EA%B8%B0%ED%83%80">기타</a>' 카테고리의 다른 글
+                  <a href="/category/%EA%B0%9C%EB%B0%9C/Flutter%20%26%20Dart">Flutter &amp; Dart</a>' 카테고리의 다른 글
                 </h4>
                 <table>
                   <tbody>
                     <tr>
                       <th>
                         <a
-                          href="/entry/%EC%96%B8%EC%A0%9C%EA%B9%8C%EC%A7%80-add-commit-push%EB%A7%8C-%EC%82%AC%EC%9A%A9%ED%95%A0-%EA%B1%B4%EA%B0%80%EC%9A%94-%EB%8B%A4%EB%A5%B8-git-%EB%AA%85%EB%A0%B9%EC%96%B4%EB%93%A4"
-                          >언제까지 add, commit, push만 사용할 건가요? - commit과 관련된 다른 git 명령어들</a
+                          href="/entry/Dart%EC%9D%98-Mixin-%EC%83%81%EC%86%8D%EA%B3%BC%EB%8A%94-%EB%AC%B4%EC%97%87%EC%9D%B4-%EB%8B%A4%EB%A5%B8%EA%B0%80"
+                          >Dart의 Mixin, 상속과는 무엇이 다른가?</a
                         >&nbsp;&nbsp;<span>(0)</span>
                       </th>
-                      <td>2024.06.18</td>
+                      <td>2024.07.10</td>
                     </tr>
                     <tr>
                       <th>
                         <a
-                          href="/entry/%EC%9B%B9-%EA%B0%9C%EB%B0%9C%EC%9E%90%EB%9D%BC%EB%A9%B4-%EC%A0%95%EA%B7%9C-%ED%91%9C%ED%98%84%EC%8B%9D%EC%9D%80-%EC%95%8C%EC%95%84%EC%95%BC%EC%A7%80"
-                          >웹 개발자라면 정규 표현식은 알아야지</a
+                          href="/entry/Flutter%EC%97%90%EC%84%9C-interface%EC%99%80-abstract-%ED%82%A4%EC%9B%8C%EB%93%9C%EB%8A%94-%EA%B0%81%EA%B0%81-%EC%96%B4%EB%96%A4-%EC%83%81%ED%99%A9%EC%97%90-%EC%82%AC%EC%9A%A9%ED%95%98%EB%8A%94-%EA%B2%8C-%EC%A2%8B%EC%9D%84%EA%B9%8C"
+                          >Dart(와 Flutter)에서 interface와 abstract 키워드는 각각 어떤 상황에 사용하는 게 좋을까?</a
                         >&nbsp;&nbsp;<span>(0)</span>
                       </th>
-                      <td>2024.03.18</td>
+                      <td>2024.05.01</td>
                     </tr>
                     <tr>
                       <th>
                         <a
-                          href="/entry/%EC%9B%B9%EC%82%AC%EC%9D%B4%ED%8A%B8-%EC%84%B1%EB%8A%A5-%EA%B0%9C%EC%84%A0-%ED%8C%8C%EC%9D%BC-%ED%81%AC%EA%B8%B0-%EC%A4%84%EC%9D%B4%EA%B8%B0"
-                          >웹사이트 성능 개선 - 파일 크기 줄이기(코드스플리팅과 압축)</a
+                          href="/entry/%EB%B3%B5%EC%9E%A1%ED%95%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0-%ED%9D%90%EB%A6%84%EC%9D%84-%EB%8D%94-%EC%89%BD%EA%B2%8C-%EA%B4%80%EB%A6%AC%ED%95%A0-%EC%88%98-%EC%9E%88%EB%8A%94-Streamfeat-Flutter"
+                          >복잡한 데이터 흐름을 더 쉽게 관리할 수 있는 Stream(feat. Flutter)</a
                         >&nbsp;&nbsp;<span>(0)</span>
                       </th>
-                      <td>2024.02.18</td>
-                    </tr>
-                    <tr>
-                      <th>
-                        <a
-                          href="/entry/%EB%AF%B8%EB%8B%88-%ED%8A%B8%EB%9F%AC%EB%B8%94-%EC%8A%88%ED%8C%85-%EC%95%84%EB%A7%88%EC%A1%B4-S3-Presinged-URL%EC%97%90%EC%84%9C-%EB%B0%9C%EC%83%9D%ED%95%9C-%EB%AC%B8%EC%A0%9C%EB%93%A4%EA%B3%BC-%ED%95%B4%EA%B2%B0%ED%95%9C-%EB%B0%A9%EB%B2%95"
-                          >미니 트러블 슈팅: 아마존 S3 Presinged URL에서 발생한 문제들과 해결한 방법</a
-                        >&nbsp;&nbsp;<span>(0)</span>
-                      </th>
-                      <td>2024.02.11</td>
+                      <td>2024.04.27</td>
                     </tr>
                   </tbody>
                 </table>
