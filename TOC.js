@@ -45,14 +45,17 @@ const articleContents = document.getElementById(contentId);
 function setTOC(hTag) {
   hTag.id = getTagId(hTag);
 
-  const aTag = document.createElement("a");
-  aTag.textContent = hTag.textContent;
-  aTag.href = `#${getTagId(hTag)}`;
-  aTag.id = `TOC-${getTagId(hTag)}`;
-  aTag.classList.add(`${hTag.tagName.toLowerCase()}-TOC`);
+  const buttonTag = document.createElement("button");
+  buttonTag.textContent = hTag.textContent;
+  buttonTag.addEventListener("click", () => {
+    document.getElementById(`${getTagId(hTag)}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    console.log("이동");
+  });
+  buttonTag.id = `TOC-${getTagId(hTag)}`;
+  buttonTag.classList.add(`${hTag.tagName.toLowerCase()}-TOC`);
 
   const currentHTagElement = document.createElement("li");
-  currentHTagElement.appendChild(aTag);
+  currentHTagElement.appendChild(buttonTag);
 
   return currentHTagElement;
 }
@@ -65,14 +68,13 @@ function TOCHighlight() {
   const hElements = Array.from(articleContents.querySelectorAll("h2, h3"));
 
   const viewportTop = window.scrollY;
-  const viewportMiddle = window.scrollY + window.innerHeight / 1.5;
 
   const elementsInRange = hElements.filter((el) => {
     const rect = el.getBoundingClientRect();
     const elementTop = rect.top + window.scrollY;
     const elementBottom = elementTop + rect.height;
 
-    return elementTop <= viewportMiddle && elementTop >= viewportTop && elementBottom > viewportTop;
+    return elementTop >= viewportTop && elementBottom >= viewportTop;
   });
 
   let closest;
@@ -103,25 +105,8 @@ function TOCHighlight() {
       getTocElement(e)?.classList.remove(className);
     });
     toActive.classList.add(className);
-    scrollToCenter(toActive, "table-of-contents");
+    toActive.scrollIntoView({ behavior: "instant", block: "center" });
   }
-}
-
-function scrollToCenter(element, containerId) {
-  const container = document.getElementById(containerId);
-
-  if (!container) return;
-
-  const containerRect = container.getBoundingClientRect();
-  const elementRect = element.getBoundingClientRect();
-
-  const elementCenter = elementRect.top - containerRect.top + container.scrollTop + elementRect.height / 2;
-  const containerCenter = containerRect.height / 2;
-  const scrollTop = elementCenter - containerCenter;
-
-  container.scrollTo({
-    top: scrollTop,
-  });
 }
 
 /**
