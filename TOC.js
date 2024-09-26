@@ -68,37 +68,18 @@ function TOCHighlight() {
   const hElements = Array.from(articleContents.querySelectorAll("h2, h3"));
 
   const viewportTop = window.scrollY;
-
-  const elementsInRange = hElements.filter((el) => {
-    const rect = el.getBoundingClientRect();
-    const elementTop = rect.top + window.scrollY;
-    const elementBottom = elementTop + rect.height;
-
-    return elementBottom >= viewportTop;
+  let highlightElement = hElements[0];
+  let closestDistance = Infinity;
+  hElements.forEach((element) => {
+    const elementOffsetTop = element.getBoundingClientRect().top + viewportTop;
+    const distance = Math.abs(scrollY - elementOffsetTop);
+    if (closestDistance > distance) {
+      highlightElement = element;
+      closestDistance = distance;
+    }
   });
 
-  let closest;
-
-  if (elementsInRange.length > 0) {
-    // 중간까지 보이는 요소가 존재하면 그 중에서 첫 번째 요소를 반환
-    closest = elementsInRange[0];
-  } else {
-    // 화면 위쪽에 있는 가장 마지막 요소를 찾음
-    const elementsAboveViewport = hElements.filter((el) => {
-      const rect = el.getBoundingClientRect();
-      const elementTop = rect.top + window.scrollY;
-      const elementBottom = elementTop + rect.height;
-
-      return elementBottom < viewportTop;
-    });
-
-    if (elementsAboveViewport.length > 0) {
-      // 가장 마지막 요소를 반환
-      closest = elementsAboveViewport[elementsAboveViewport.length - 1];
-    }
-  }
-
-  const toActive = getTocElement(closest);
+  const toActive = getTocElement(highlightElement);
 
   if (toActive) {
     hElements.forEach((e) => {
