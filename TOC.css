@@ -56,7 +56,8 @@ h3 {
 }
 
 #table-of-contents .active_TOC {
-  background: #edeff1;
+  background: #e9e9e9;
+  width: 90%;
   font-weight: bold;
   transform: scale(1.05);
   display: inline-block;
