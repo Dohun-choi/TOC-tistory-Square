@@ -11,7 +11,7 @@ function getTagId(hTag) {
 
 const contentId = "article-view";
 
-window.addEventListener("scroll", TOCHighlight);
+window.addEventListener("scroll", throttle(TOCHighlight, 50));
 
 const articleContents = document.getElementById(contentId);
 
@@ -100,4 +100,30 @@ function getTocElement(articleHTag) {
   element = document.getElementById(`TOC-${articleHTag.id}`);
 
   return element;
+}
+
+/**
+ * @template T
+ * @param {(...args: T extends any[] ? T : [] ) => void} func - 실행할 함수
+ * @param {number} limit - 함수 호출 간격 (밀리초 단위)
+ * @returns {(...args: T extends any[] ? T : [] ) => void} - 쓰로틀된 함수
+ */
+function throttle(func, limit) {
+  let lastFunc;
+  let lastRan;
+  return function (...args) {
+    const context = this;
+    if (!lastRan) {
+      func.apply(context, args);
+      lastRan = Date.now();
+    } else {
+      clearTimeout(lastFunc);
+      lastFunc = setTimeout(() => {
+        if (Date.now() - lastRan >= limit) {
+          func.apply(context, args);
+          lastRan = Date.now();
+        }
+      }, limit - (Date.now() - lastRan));
+    }
+  };
 }
